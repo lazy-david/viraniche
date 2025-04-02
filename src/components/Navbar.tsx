@@ -56,6 +56,12 @@ export default function Navbar() {
                 Overview
               </Link>
               <Link
+                href="/dashboard/trending"
+                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Trending
+              </Link>
+              <Link
                 href="/dashboard/analytics"
                 className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
               >
@@ -203,4 +209,4 @@ export default function Navbar() {
       )}
     </nav>
   );
-} 
+}

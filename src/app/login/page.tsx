@@ -35,7 +35,7 @@ export default function LoginPage() {
           ViralNiche
         </h1>
         <p className="text-sm text-gray-300 mb-6">
-          Your all-in-one content management platform
+          Your all-in-one content analyzer platform
         </p>
 
         <button
