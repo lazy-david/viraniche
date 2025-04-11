@@ -4,51 +4,86 @@ const YOUTUBE_API_BASE_URL = 'https://www.googleapis.com/youtube/v3';
 
 export interface YouTubeVideo {
   id: string;
+  username: string;
   title: string;
   thumbnail: string;
+  niche: string;
   views: string;
   engagement: string;
-  username: string;
+  publishedAt: string;
 }
 
-export async function fetchTrendingYouTubeVideos(): Promise<YouTubeVideo[]> {
+export const fetchTrendingYouTubeVideos = async (niche = 'All'): Promise<YouTubeVideo[]> => {
   try {
-    const response = await axios.get(`${YOUTUBE_API_BASE_URL}/videos`, {
+    const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const searchQuery = niche === 'All' ? 'trending viral' : `trending ${niche.toLowerCase()} viral`;
+
+    // First, search for videos
+    const searchResponse = await axios.get(`${YOUTUBE_API_BASE_URL}/search`, {
       params: {
-        part: 'snippet,statistics',
-        chart: 'mostPopular',
+        part: 'snippet',
+        q: searchQuery,
+        type: 'video',
         maxResults: 10,
-        regionCode: 'US', // Add region code
-        videoCategoryId: '0', // General category
+        order: 'viewCount',
+        publishedAfter: oneWeekAgo,
         key: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY,
       },
     });
 
-    if (!response.data || !response.data.items) {
-      console.error('Invalid response structure:', response.data);
+    if (!searchResponse.data.items?.length) {
       return [];
     }
 
-    return response.data.items.map((item: any) => ({
-      id: item.id,
+    // Then get detailed statistics for those videos
+    const videoIds = searchResponse.data.items.map((item: any) => item.id.videoId).join(',');
+    const statsResponse = await axios.get(`${YOUTUBE_API_BASE_URL}/videos`, {
+      params: {
+        part: 'statistics,snippet',
+        id: videoIds,
+        key: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY,
+      },
+    });
+
+    return searchResponse.data.items.map((item: any, index: number) => ({
+      id: item.id.videoId,
       title: item.snippet.title,
-      thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.default?.url,
-      views: formatCount(item.statistics.viewCount || 0),
+      thumbnail: item.snippet.thumbnails.high.url,
+      views: formatCount(statsResponse.data.items[index]?.statistics?.viewCount || '0'),
       engagement: formatCount(
-        (parseInt(item.statistics.likeCount || '0') + 
-        parseInt(item.statistics.commentCount || '0'))
+        parseInt(statsResponse.data.items[index]?.statistics?.likeCount || '0') +
+        parseInt(statsResponse.data.items[index]?.statistics?.commentCount || '0')
       ),
       username: item.snippet.channelTitle,
-      niche: 'Entertainment', // Default niche
+      niche: niche === 'All' ? detectNiche(item.snippet.title) : niche,
+      publishedAt: item.snippet.publishedAt
     }));
-  } catch (error: any) {
-    console.error('Error fetching YouTube videos:', {
-      message: error.message,
-      response: error.response?.data,
-      status: error.response?.status,
-    });
+  } catch (error) {
+    console.error('Error fetching YouTube videos:', error);
     return [];
   }
+};
+
+function getYouTubeCategoryId(niche: string): string {
+  const categories: Record<string, string> = {
+    'Entertainment': '24',
+    'Music': '10',
+    'Gaming': '20',
+    'Sports': '17',
+    'News': '25',
+    'Education': '27',
+    'Technology': '28',
+    'Comedy': '23',
+    'Film': '1',
+    'Lifestyle': '22',
+  };
+  return categories[niche] || '';
+}
+
+function calculateEngagement(stats: any): number {
+  const likes = parseInt(stats.likeCount || '0');
+  const comments = parseInt(stats.commentCount || '0');
+  return likes + (comments * 2); // Weighted engagement score
 }
 
 function formatCount(count: number | string): string {
@@ -60,4 +95,24 @@ function formatCount(count: number | string): string {
     return (num / 1000).toFixed(1) + 'K';
   }
   return num.toString();
+}
+
+function detectNiche(title: string): string {
+  const nicheKeywords: Record<string, string[]> = {
+    Technology: ['tech', 'coding', 'programming', 'software', 'hardware'],
+    Education: ['learn', 'tutorial', 'guide', 'how to', 'education'],
+    Entertainment: ['game', 'play', 'fun', 'comedy', 'entertainment'],
+    Business: ['business', 'startup', 'entrepreneur', 'marketing'],
+    Food: ['cook', 'recipe', 'food', 'cooking', 'kitchen'],
+    Sports: ['sport', 'fitness', 'workout', 'exercise', 'training'],
+    Health: ['health', 'wellness', 'medical', 'nutrition'],
+  };
+
+  const titleLower = title.toLowerCase();
+  for (const [niche, keywords] of Object.entries(nicheKeywords)) {
+    if (keywords.some(keyword => titleLower.includes(keyword))) {
+      return niche;
+    }
+  }
+  return 'Entertainment';
 }

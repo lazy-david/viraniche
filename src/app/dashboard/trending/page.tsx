@@ -1,12 +1,11 @@
 'use client';
-import { FaYoutube, FaTiktok, FaTwitter } from 'react-icons/fa';
-import React, { useEffect, useState } from 'react';
-import { fetchTrendingYouTubeVideos, YouTubeVideo } from '@/utils/youtube';
+
+import React from 'react';
 
 const platforms = [
   {
     name: 'YouTube',
-    icon: <FaYoutube className="text-2xl text-red-600" />,
+    icon: '🎥',
     posts: [
       { id: 1, username: '@TechEduPro', title: 'Ultimate Guide to Content Creation', views: '250K', engagement: '15K', niche: 'Education', thumbnail: '/thumbnails/youtube-guide.jpg' },
       { id: 2, username: '@LifestyleVlog', title: 'Behind the Scenes: Creator Life', views: '180K', engagement: '12K', niche: 'Lifestyle', thumbnail: '/thumbnails/creator-life.jpg' },
@@ -22,7 +21,7 @@ const platforms = [
   },
   {
     name: 'TikTok',
-    icon: <FaTiktok className="text-2xl" />,
+    icon: '📱',
     posts: [
       { id: 1, username: '@DanceKing', title: 'Viral Dance Challenge Tutorial', views: '500K', engagement: '45K', niche: 'Entertainment', thumbnail: '/thumbnails/dance-challenge.jpg' },
       { id: 2, username: '@TechTips', title: 'Quick Tech Tips & Tricks', views: '300K', engagement: '28K', niche: 'Technology', thumbnail: '/thumbnails/tech-tips.jpg' },
@@ -38,12 +37,12 @@ const platforms = [
   },
   {
     name: 'X (Twitter)',
-    icon: <FaTwitter className="text-2xl text-blue-400" />,
+    icon: '🐦',
     posts: [
       { id: 1, username: '@NewsAnalyst', title: 'Breaking: A comprehensive analysis of the latest global developments and their implications for international relations. Key points on economic impact and future scenarios...', views: '150K', engagement: '10K', niche: 'News', thumbnail: '/thumbnails/news-analysis.jpg' },
-      { id: 2, username: '@GrowthHacker', title: 'THREAD: 10 Unconventional Growth Strategies That Actually Work. I\'ve spent 5 years testing these methods across various industries. Here\'s what you need to know...', views: '200K', engagement: '18K', niche: 'Business', thumbnail: '/thumbnails/growth-hacks.jpg' },
-      { id: 3, username: '@TechInsider', title: 'EXCLUSIVE: Inside scoop on the next big tech revolution. Sources reveal groundbreaking developments in AI and quantum computing. Here\'s what it means for the future...', views: '180K', engagement: '15K', niche: 'Technology', thumbnail: '/thumbnails/tech-news.jpg' },
-      { id: 4, username: '@MarketWatch', title: 'Market Analysis: Deep dive into today\'s market movements. Key trends, important indicators, and what they mean for your investment strategy. Full breakdown thread...', views: '160K', engagement: '12K', niche: 'Finance', thumbnail: '/thumbnails/market.jpg' },
+      { id: 2, username: '@GrowthHacker', title: 'THREAD: 10 Unconventional Growth Strategies That Actually Work. I've spent 5 years testing these methods across various industries. Here's what you need to know...', views: '200K', engagement: '18K', niche: 'Business', thumbnail: '/thumbnails/growth-hacks.jpg' },
+      { id: 3, username: '@TechInsider', title: 'EXCLUSIVE: Inside scoop on the next big tech revolution. Sources reveal groundbreaking developments in AI and quantum computing. Here's what it means for the future...', views: '180K', engagement: '15K', niche: 'Technology', thumbnail: '/thumbnails/tech-news.jpg' },
+      { id: 4, username: '@MarketWatch', title: 'Market Analysis: Deep dive into today's market movements. Key trends, important indicators, and what they mean for your investment strategy. Full breakdown thread...', views: '160K', engagement: '12K', niche: 'Finance', thumbnail: '/thumbnails/market.jpg' },
       { id: 5, username: '@PolicyExpert', title: 'THREAD: Understanding the implications of new policy changes. A detailed analysis of recent legislative developments and their impact on various sectors...', views: '140K', engagement: '9K', niche: 'Politics', thumbnail: '/thumbnails/policy.jpg' },
       { id: 6, username: '@StartupGuru', title: 'How I Built a 7-Figure Business from Zero: A detailed thread on the exact steps, challenges, and lessons learned along the way. Real numbers and strategies included...', views: '220K', engagement: '20K', niche: 'Business', thumbnail: '/thumbnails/startup.jpg' },
       { id: 7, username: '@DataScientist', title: 'THREAD: The Future of AI - Breaking down complex concepts into simple explanations. What you need to know about machine learning, neural networks, and more...', views: '190K', engagement: '16K', niche: 'Technology', thumbnail: '/thumbnails/ai.jpg' },
@@ -61,67 +60,18 @@ const niches = [
   'Technology',
   'Lifestyle',
   'Business',
-  'News',
-  'Food',
-  'Sports',
-  'Health'
+  'News'
 ];
 
 export default function TrendingPage() {
   const [selectedNiche, setSelectedNiche] = React.useState('All');
-  const [youtubeVideos, setYoutubeVideos] = useState<YouTubeVideo[]>([]);
 
-  useEffect(() => {
-    const fetchVideos = async () => {
-      const videos = await fetchTrendingYouTubeVideos();
-      setYoutubeVideos(videos);
-    };
-    
-    fetchVideos();
-  }, []);
-
-  const allPlatforms = [
-    {
-      name: 'YouTube',
-      icon: platforms[0].icon,
-      posts: youtubeVideos.map(video => ({
-        id: video.id,
-        username: video.username,
-        title: video.title,
-        views: video.views,
-        engagement: video.engagement,
-        niche: video.niche || 'Entertainment', // Use video's niche or default to Entertainment
-        thumbnail: video.thumbnail,
-      })),
-    },
-    ...platforms.slice(1)
-  ];
-
-  const filteredPlatforms = allPlatforms.map(platform => {
-    const filteredPosts = platform.posts
-      .filter(post => 
-        selectedNiche === 'All' ? true : post.niche.toLowerCase() === selectedNiche.toLowerCase()
-      )
-      .sort((a, b) => {
-        // Convert engagement values to numbers for comparison
-        const aEngagement = parseInt(a.engagement.replace('K', '000'));
-        const bEngagement = parseInt(b.engagement.replace('K', '000'));
-        const aViews = parseInt(a.views.replace('K', '000'));
-        const bViews = parseInt(b.views.replace('K', '000'));
-        
-        // Calculate viral score based on engagement and views
-        const aViralScore = aEngagement * 2 + aViews;
-        const bViralScore = bEngagement * 2 + bViews;
-        
-        return bViralScore - aViralScore;
-      })
-      .slice(0, 10); // Show top 10 most viral posts
-  
-    return {
-      ...platform,
-      posts: filteredPosts
-    };
-  });
+  const filteredPlatforms = platforms.map(platform => ({
+    ...platform,
+    posts: platform.posts.filter(post => 
+      selectedNiche === 'All' || post.niche === selectedNiche
+    )
+  }));
 
   return (
     <div className="space-y-6 p-6">
@@ -166,7 +116,7 @@ export default function TrendingPage() {
             </div>
             <div className="p-6">
               {platform.posts.length > 0 ? (
-                <div className="grid grid-flow-col auto-cols-[300px] gap-6 overflow-x-auto pb-4 scrollbar-none">
+                <div className="flex space-x-6 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
                   {platform.posts.map((post) => (
                     <div
                       key={post.id}

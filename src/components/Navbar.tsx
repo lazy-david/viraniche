@@ -46,40 +46,7 @@ export default function Navbar() {
                 />
               </Link>
             </div>
-
-            {/* Navigation Links */}
-            <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-8">
-              <Link
-                href="/dashboard"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Overview
-              </Link>
-              <Link
-                href="/dashboard/trending"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Trending
-              </Link>
-              <Link
-                href="/dashboard/analytics"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Analytics
-              </Link>
-              <Link
-                href="/dashboard/content"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Content
-              </Link>
-              <Link
-                href="/dashboard/settings"
-                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Settings
-              </Link>
-            </div>
+            {/* Navigation Links removed */}
           </div>
 
           {/* Profile Dropdown */}
@@ -174,30 +141,6 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="sm:hidden bg-[rgba(6,12,26,255)]">
           <div className="pt-2 pb-3 space-y-1">
-            <Link
-              href="/dashboard"
-              className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Overview
-            </Link>
-            <Link
-              href="/dashboard/analytics"
-              className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Analytics
-            </Link>
-            <Link
-              href="/dashboard/content"
-              className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Content
-            </Link>
-            <Link
-              href="/dashboard/settings"
-              className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Settings
-            </Link>
             <button
               onClick={handleSignOut}
               className="text-gray-300 hover:text-white block w-full text-left px-3 py-2 rounded-md text-base font-medium"

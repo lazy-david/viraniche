@@ -12,6 +12,8 @@
     "@firebase/auth": "^1.10.0",
     "axios": "^1.8.4",
     "firebase": "^11.6.0",
+    "framer-motion": "^12.6.3",
+    "lucide-react": "^0.487.0",
     "mongodb": "^6.15.0",
     "mongoose": "^8.13.1",
     "next": "15.2.4",
