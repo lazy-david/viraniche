@@ -1,4 +1,3 @@
-Say no more! Here's the **full-blown README.md**—clean, formatted, and ready for **copy-paste once**. No placeholder leftover, everything complete. Just swap in your GitHub username or repo if you wan personalize am 🔥
 
 ---
 
