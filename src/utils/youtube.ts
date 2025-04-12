@@ -91,7 +91,13 @@ interface Statistics {
 
 // Then use this type instead of 'any'
 export const calculateEngagement = (statistics: Statistics): string => {
-  // Function implementation
+  // Calculate engagement by adding likes and comments
+  const likes = parseInt(statistics.likeCount || '0');
+  const comments = parseInt(statistics.commentCount || '0');
+  const totalEngagement = likes + comments;
+  
+  // Format the engagement count
+  return formatCount(totalEngagement);
 }
 
 // Remove or use the unused functions
