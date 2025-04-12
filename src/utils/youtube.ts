@@ -124,3 +124,32 @@ function detectNiche(title: string): string {
   }
   return 'Entertainment';
 }
+
+/**
+ * Fetches trending YouTube shorts (videos under 2 minutes)
+ */
+export const fetchTrendingShorts = async (region = 'US') => {
+  try {
+    console.log('Fetching shorts for region:', region);
+    const response = await fetch(`/api/youtube/shorts?region=${region}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Shorts API error response:', errorText);
+      throw new Error(`Failed to fetch trending shorts: ${response.status} ${errorText}`);
+    }
+    
+    const data = await response.json();
+    console.log('Shorts data received:', data.length, 'items');
+    return data;
+  } catch (error) {
+    console.error('Error fetching trending shorts:', error);
+    // Return empty array instead of throwing to prevent component errors
+    return [];
+  }
+};
