@@ -96,7 +96,7 @@ export default function YoutubePage() {
   if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
 
   return (
-    <div className="min-h-screen bg-[rgba(6,12,26,255)] p-6 custom-scrollbar">
+    <div className="min-h-screen bg-[rgba(6,12,26,255)] p-6">
       <h1 className="text-3xl font-bold text-white mb-8">YouTube Analytics</h1>
       
       {/* Top Videos Carousel */}
@@ -201,9 +201,6 @@ export default function YoutubePage() {
         .custom-scrollbar::-webkit-scrollbar-thumb {
           background: #000;
           border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #333;
         }
       `}</style>
     </div>

@@ -5,6 +5,19 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  // Add output configuration for better caching
+  output: 'standalone',
+  // Add experimental features for better performance
+  experimental: {
+    // Enable caching for faster builds
+    turbotrace: {
+      logLevel: 'error',
+    },
+    // Enable persistent caching
+    cache: true,
+  },
+  // Increase build cache size
+  distDir: '.next',
 }
 
 module.exports = nextConfig
