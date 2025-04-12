@@ -177,7 +177,7 @@ export default function YoutubePage() {
       </section>
 
       {/* Niche-based Videos Section */}
-      // In the Niche-based Videos Section, replace the Image component with a properly configured one
+      
       
       <section className="bg-gray-900/50 rounded-xl p-6">
         <div className="flex justify-between items-center mb-6">
