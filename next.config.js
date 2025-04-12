@@ -1,23 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
-  // Add output configuration for better caching
   output: 'standalone',
-  // Add experimental features for better performance
   experimental: {
-    // Enable caching for faster builds
     turbotrace: {
       logLevel: 'error',
     },
-    // Enable persistent caching
-    cache: true,
   },
-  // Increase build cache size
-  distDir: '.next',
+  images: {
+    domains: [
+      'lh3.googleusercontent.com',    // For Google profile images
+      'i.ytimg.com',                  // For YouTube thumbnails
+      'img.youtube.com',              // Additional YouTube image domain
+      'yt3.ggpht.com'                 // For YouTube channel avatars
+    ],
+  },
 }
 
 module.exports = nextConfig
