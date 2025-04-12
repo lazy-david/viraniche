@@ -80,12 +80,20 @@ function getYouTubeCategoryId(niche: string): string {
   return categories[niche] || '';
 }
 
-function calculateEngagement(stats: any): number {
-  const likes = parseInt(stats.likeCount || '0');
-  const comments = parseInt(stats.commentCount || '0');
-  return likes + (comments * 2); // Weighted engagement score
+// Replace 'any' with proper types
+// For example:
+interface Statistics {
+  viewCount: string;
+  likeCount: string;
+  commentCount: string;
 }
 
+// Then use this type instead of 'any'
+export const calculateEngagement = (statistics: Statistics): string => {
+  // Function implementation
+}
+
+// Remove or use the unused functions
 function formatCount(count: number | string): string {
   const num = typeof count === 'string' ? parseInt(count) : count;
   if (num >= 1000000) {

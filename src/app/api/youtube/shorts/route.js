@@ -8,7 +8,8 @@ export async function GET(request) {
     console.log('Shorts API called with region:', region);
     const apiKey = process.env.YOUTUBE_API_KEY;
     
-    if (!apiKey) {mak
+    // Line 11 has an unexpected expression
+    if (!apiKey) {
       console.error('YouTube API key is missing in environment variables');
       throw new Error('YouTube API key is not configured');
     }
