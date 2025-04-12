@@ -55,19 +55,38 @@ export default function YoutubePage() {
         setViralVideos(videos.slice(0, 8));
         
         // Try to fetch shorts, but fall back to regular videos if it fails
+        // Update the fallback code to map YouTubeVideo to YouTubeShort format
         try {
           const shorts = await fetchTrendingShorts(userRegion);
           if (shorts && shorts.length > 0) {
             setViralShorts(shorts.slice(0, 8));
           } else {
-            // Use regular videos as fallback for shorts
+            // Use regular videos as fallback for shorts, but map to correct format
             console.log('No shorts returned, using regular videos as fallback');
-            setViralShorts(videos.slice(8, 16));
+            const mappedShorts = videos.slice(8, 16).map(video => ({
+              id: video.id,
+              title: video.title,
+              thumbnail: video.thumbnail,
+              views: video.views,
+              engagement: video.engagement,
+              channelTitle: video.username, // Map username to channelTitle
+              publishedAt: video.publishedAt
+            }));
+            setViralShorts(mappedShorts);
           }
         } catch (shortsError) {
           console.error('Error fetching shorts, using regular videos instead:', shortsError);
-          // Use regular videos as fallback for shorts
-          setViralShorts(videos.slice(8, 16));
+          // Use regular videos as fallback for shorts, but map to correct format
+          const mappedShorts = videos.slice(8, 16).map(video => ({
+            id: video.id,
+            title: video.title,
+            thumbnail: video.thumbnail,
+            views: video.views,
+            engagement: video.engagement,
+            channelTitle: video.username, // Map username to channelTitle
+            publishedAt: video.publishedAt
+          }));
+          setViralShorts(mappedShorts);
         }
         
         // Fetch niche videos
@@ -158,6 +177,8 @@ export default function YoutubePage() {
       </section>
 
       {/* Niche-based Videos Section */}
+      // In the Niche-based Videos Section, replace the Image component with a properly configured one
+      
       <section className="bg-gray-900/50 rounded-xl p-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-white">Trending by Niche</h2>
@@ -178,11 +199,9 @@ export default function YoutubePage() {
           <div className="flex overflow-x-auto pb-4 space-x-4 custom-scrollbar">
             {nicheVideos.map((video) => (
               <div key={video.id} className="w-72 flex-shrink-0 group relative">
-                <Image 
+                <img 
                   src={video.thumbnail} 
                   alt={video.title} 
-                  width={300}
-                  height={168}
                   className="w-full h-40 object-cover rounded-xl transform group-hover:scale-105 transition-all"
                 />
                 <div className="mt-3">

@@ -129,7 +129,7 @@ function detectNiche(title: string): string {
 /**
  * Fetches trending YouTube shorts (videos under 2 minutes)
  */
-export const fetchTrendingShorts = async (region = 'US') => {
+export const fetchTrendingShorts = async (region = 'US'): Promise<YouTubeShort[]> => {
   try {
     console.log('Fetching shorts for region:', region);
     const response = await fetch(`/api/youtube/shorts?region=${region}`, {
@@ -154,3 +154,14 @@ export const fetchTrendingShorts = async (region = 'US') => {
     return [];
   }
 };
+
+// Add the YouTubeShort interface export
+export interface YouTubeShort {
+  id: string;
+  title: string;
+  thumbnail: string;
+  views: string;
+  engagement: string;
+  channelTitle: string;
+  publishedAt: string;
+}
