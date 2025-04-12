@@ -4,7 +4,8 @@ const nextConfig = {
     domains: [
       'i.ytimg.com',
       'img.youtube.com',
-      'yt3.ggpht.com'
+      'yt3.ggpht.com',
+      'lh3.googleusercontent.com'  // Added Google domain for profile images
     ],
   },
   eslint: {
