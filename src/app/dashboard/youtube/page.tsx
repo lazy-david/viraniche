@@ -1,15 +1,26 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { fetchTrendingYouTubeVideos, fetchTrendingShorts } from '@/utils/youtube';
+import { fetchTrendingYouTubeVideos, fetchTrendingShorts, YouTubeVideo } from '@/utils/youtube';
 import { auth } from '@/lib/firebase';
 import { getUserRegion } from '@/utils/userProfile';
 import Image from 'next/image'; // Move the import to the top of the file
 
+// Define interface for shorts if it's different from regular videos
+interface YouTubeShort {
+  id: string;
+  title: string;
+  thumbnail: string;
+  views: string;
+  engagement: string;
+  channelTitle: string;
+  publishedAt: string;
+}
+
 export default function YoutubePage() {
-  const [viralVideos, setViralVideos] = useState([]);
-  const [viralShorts, setViralShorts] = useState([]);
-  const [nicheVideos, setNicheVideos] = useState([]);
+  const [viralVideos, setViralVideos] = useState<YouTubeVideo[]>([]);
+  const [viralShorts, setViralShorts] = useState<YouTubeShort[]>([]);
+  const [nicheVideos, setNicheVideos] = useState<YouTubeVideo[]>([]);
   const [selectedNiche, setSelectedNiche] = useState('All');
   const [loading, setLoading] = useState(true);
   const [nicheLoading, setNicheLoading] = useState(false);
