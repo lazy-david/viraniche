@@ -15,9 +15,16 @@ export interface YouTubeVideo {
 
 export const fetchTrendingYouTubeVideos = async (niche = 'All', region = 'US'): Promise<YouTubeVideo[]> => {
   try {
+    if (!process.env.NEXT_PUBLIC_YOUTUBE_API_KEY) {
+      console.error('YouTube API key is not configured');
+      return [];
+    }
+
     const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
     const searchQuery = niche === 'All' ? 'trending viral' : `trending ${niche.toLowerCase()} viral`;
 
+    console.log('Fetching YouTube videos with params:', { niche, region, searchQuery });
+    
     // First, search for videos
     const searchResponse = await axios.get(`${YOUTUBE_API_BASE_URL}/search`, {
       params: {

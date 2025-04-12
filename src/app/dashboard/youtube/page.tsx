@@ -123,6 +123,28 @@ export default function YoutubePage() {
     fetchNicheData();
   }, [selectedNiche, loading, userRegion]);
 
+  // Add new state for API availability
+  const [apiAvailable, setApiAvailable] = useState(true);
+
+  useEffect(() => {
+    // Check if API key is available
+    if (!process.env.NEXT_PUBLIC_YOUTUBE_API_KEY) {
+      setApiAvailable(false);
+      setError('YouTube API is not configured');
+      setLoading(false);
+    }
+  }, []);
+
+  if (!apiAvailable) {
+    return (
+      <div className="min-h-screen bg-[rgba(6,12,26,255)] p-6">
+        <div className="text-center py-8">
+          <h1 className="text-3xl font-bold text-white mb-4">YouTube Analytics</h1>
+          <p className="text-red-500">YouTube API is currently unavailable. Please try again later.</p>
+        </div>
+      </div>
+    );
+  }
   if (loading) return <div className="text-center py-8 text-gray-400">Loading analytics...</div>;
   if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
 
