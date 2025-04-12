@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { fetchTrendingYouTubeVideos, fetchTrendingShorts } from '@/utils/youtube';
 import { auth } from '@/lib/firebase';
 import { getUserRegion } from '@/utils/userProfile';
+import Image from 'next/image'; // Move the import to the top of the file
 
 export default function YoutubePage() {
   const [viralVideos, setViralVideos] = useState([]);
@@ -165,17 +166,14 @@ export default function YoutubePage() {
         ) : (
           <div className="flex overflow-x-auto pb-4 space-x-4 custom-scrollbar">
             {nicheVideos.map((video) => (
-              // Import Image from next/image
-              import Image from 'next/image';
-              
-              // Replace img tags with Image components
-              <Image 
-                src={video.thumbnail} 
-                alt={video.title} 
-                width={300}
-                height={168}
-                className="w-full h-40 object-cover rounded-xl transform group-hover:scale-105 transition-all"
-              />
+              <div key={video.id} className="w-72 flex-shrink-0 group relative">
+                <Image 
+                  src={video.thumbnail} 
+                  alt={video.title} 
+                  width={300}
+                  height={168}
+                  className="w-full h-40 object-cover rounded-xl transform group-hover:scale-105 transition-all"
+                />
                 <div className="mt-3">
                   <p className="text-sm font-medium text-white truncate">{video.title}</p>
                   <div className="flex justify-between mt-2">
