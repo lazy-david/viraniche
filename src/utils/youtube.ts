@@ -13,7 +13,7 @@ export interface YouTubeVideo {
   publishedAt: string;
 }
 
-export const fetchTrendingYouTubeVideos = async (niche = 'All'): Promise<YouTubeVideo[]> => {
+export const fetchTrendingYouTubeVideos = async (niche = 'All', region = 'US'): Promise<YouTubeVideo[]> => {
   try {
     const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
     const searchQuery = niche === 'All' ? 'trending viral' : `trending ${niche.toLowerCase()} viral`;
@@ -27,6 +27,7 @@ export const fetchTrendingYouTubeVideos = async (niche = 'All'): Promise<YouTube
         maxResults: 10,
         order: 'viewCount',
         publishedAfter: oneWeekAgo,
+        regionCode: region, // Add region parameter
         key: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY,
       },
     });
